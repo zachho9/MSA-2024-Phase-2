@@ -1,0 +1,53 @@
+- #### **1 Steps I have taken**
+    - Loaded and examined the data from previous notebook.
+    - Splitted the dataset into train and test set.
+    - Performed feature selection for multiple linear regression. Then fit, predicted, and evaluated the model.
+    - Performed ADF test and auto arima for parameters selection of ARIMA model. Then fit, predicted, and evaluated the model.
+    - Performed cross validation on parameters selection for another ARIMA model. Then fit, predicted, and evaluated the new model.
+    - Visualization of model prediction results.
+
+- #### **2 Results**
+    - **Multiple Linear Regression**
+        - Chose the top 4 features for modeling: Year, IsHoliday, CPI, Unemployment
+        - Coefficients:
+            - Year: -19476.4345
+            - IsHoliday: 3723.5897
+            - CPI: 7939.2845
+            - Unemployment: -4053.2594
+        - Interceptor: 38191051.8778
+        - Evaluation:
+            - MAE 5035.0428
+            - MAPE: 35.2171%
+            - SMAPE: 28.0099%
+            - MSE: 36145251.5922
+            - RMSE: 6012.0921
+            - R-Squared: 0.1892
+    
+    - **ARIMA**
+        - ADF test: the data was stationary, so d was set as 0.
+        - Auto arima for tuning: (p=1, d=0, q=0) led to best AIC.
+            - Results with this setting:
+                - MAE: 2893.4832
+                - MAPE: 18.9203%
+                - SMAPE: 17.4038%
+                - MSE: 10495505.2151
+                - RMSE: 3239.6767
+        - Cross validation for tuning: (p=3, d=0, q=2) led to the least error rate.
+            - Results with this setting:
+                - MAE: 2473.1485
+                - MAPE: 15.5256%
+                - SMAPE: 15.0213%
+                - MSE: 9400121.9991
+                - RMSE: 3065.9618
+
+- #### **3 Interest Findings**
+    - For MLR:
+        - R-squared is just less than 19%, bad performance for the linear model. Apparently, the dataset is not linear correlated through plotting.
+        - MAPE and SMAPE are about 1/3, not good.
+        - RMSE and MAE were quite large, maybe because the values of weekly sales are large number. A small percent of error could led to large error value.
+        - Most of the coefficients of the features are reasonable. For example, Unemployment rate is negatively related with weekly sales. Less people umemployed, the better the sales will be. What is interesting is Year is also negatively related. It may due to various reasons, but the trend is not good for a store.
+
+    - For ARIMA:
+        - ARIMA performs better than linear regression, reducing the error and capturing the trend in a better way.
+        - Auto arima and cross validation led to different tuning results. Cross validation led to better performance than auto arima. But auto arima is the suggested methods. One reason is because auto arima uses a build-in metric AIC to measure the performance, while cross validation is more customizable. AIC and MAPE might calculate in a different way.
+        - For cross validation, we need to set the scope of the target parameter. Since there might be better results out of the set scope, the result we get might be just a local best solution instead of a global one.
